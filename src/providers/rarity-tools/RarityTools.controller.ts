@@ -1,11 +1,12 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Collectable } from '@prisma/client';
-import { CollectableService } from './database/Collectable.service';
-import { Collectable as CollectableEntity } from './database/entitites/Collectable.entity';
+import { CollectableService } from '../../database/Collectable.service';
+import { Collectable as CollectableEntity } from '../../database/entitites/Collectable.entity';
 
-@Controller()
-export class AppController {
+@ApiTags('rarity.tools')
+@Controller('rt')
+export class RarityToolsController {
   constructor(private readonly collectableService: CollectableService) {}
 
   @Get('/:collectionId/:collectableId/ranking')
