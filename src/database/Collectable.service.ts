@@ -8,9 +8,11 @@ export class CollectableService {
 
   public collectable(
     collectableWhereUniqueInput: Prisma.CollectableWhereInput,
+    collectableSelect?: Prisma.CollectableSelect,
   ): Promise<Collectable | null> {
     return this.prisma.collectable.findFirst({
       where: collectableWhereUniqueInput,
+      ...(collectableSelect ? { select: collectableSelect } : {}),
     });
   }
 }
