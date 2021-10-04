@@ -9,6 +9,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('NFTX Rarity')
     .setVersion('0.0.1')
+    .setContact('Nejc Drobnič', 'https://quantumly.dev', 'yo@quantumly.dev')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
