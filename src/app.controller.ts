@@ -13,7 +13,7 @@ export class AppController {
   ): Promise<Collectable> {
     return this.collectableService.collectable({
       collection_id: collectionId,
-      collectable_id: collectableId,
+      collectable_id: Number(collectableId),
     });
   }
 }
