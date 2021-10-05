@@ -5,7 +5,10 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 COPY yarn.lock ./
 
+RUN yarn global add prisma
 RUN yarn install
+
+RUN yarn prisma generate
 
 COPY . .
 
@@ -21,7 +24,10 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 COPY yarn.lock ./
 
+RUN yarn global add prisma
 RUN yarn install --production=true
+
+RUN yarn prisma generate
 
 COPY . .
 
