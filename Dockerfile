@@ -8,10 +8,9 @@ COPY yarn.lock ./
 RUN yarn global add prisma
 RUN yarn install
 
-RUN yarn prisma generate
-
 COPY . .
 
+RUN yarn prisma generate
 RUN yarn build
 
 FROM node:16-alpine as production
@@ -27,9 +26,9 @@ COPY yarn.lock ./
 RUN yarn global add prisma
 RUN yarn install --production=true
 
-RUN yarn prisma generate
-
 COPY . .
+
+RUN yarn prisma generate
 
 COPY --from=development /usr/src/app/dist ./dist
 
