@@ -1,18 +1,13 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RTCollectable } from '@prisma/client';
-import { BaseProvider, InjectEthersProvider } from 'nestjs-ethers';
 import { Collectable as CollectableEntity } from '../../database/entitites/Collectable.entity';
 import { RTCollectableService } from '../../database/RTCollectable.service';
 
 @ApiTags('rarity.tools')
 @Controller('rt')
 export class RarityToolsController {
-  constructor(
-    private readonly collectableService: RTCollectableService,
-    @InjectEthersProvider()
-    private readonly ethersProvider: BaseProvider,
-  ) {}
+  constructor(private readonly collectableService: RTCollectableService) {}
 
   @Get('/:collectionId/:collectableId/ranking')
   @ApiResponse({
@@ -33,10 +28,5 @@ export class RarityToolsController {
         score: true,
       },
     );
-  }
-
-  @Get('/gas')
-  async getGas(): Promise<string> {
-    return (await this.ethersProvider.getGasPrice()).toString();
   }
 }
