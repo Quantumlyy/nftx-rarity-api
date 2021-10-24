@@ -11,7 +11,7 @@ generator client {
   previewFeatures = ["mongoDb"]
 }
 
-model Collectable {
+model RTCollectable {
   id String @id @default(dbgenerated()) @map("_id") @db.ObjectId
 
   collection_id  String
