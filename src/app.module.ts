@@ -2,6 +2,7 @@ import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EthersModule, MAINNET_NETWORK } from 'nestjs-ethers';
+import { AuthModule } from './auth/Auth.module';
 import { DatabaseModule } from './database/Database.module';
 import { ProvidersModule } from './providers/Providers.module';
 
@@ -30,6 +31,7 @@ import { ProvidersModule } from './providers/Providers.module';
         };
       },
     }),
+    AuthModule,
   ],
 })
 export class AppModule {}
