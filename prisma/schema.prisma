@@ -8,7 +8,19 @@ datasource db {
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["mongoDb"]
+  previewFeatures = ["mongoDb", "dataProxy", "filterJson", "fullTextSearch", "interactiveTransactions", "referentialIntegrity"]
+}
+
+model Collection {
+  id String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+
+  name   String
+  symbol String
+
+  contractAddress String
+  abi String?
+
+  size Int?
 }
 
 model RTCollectable {
