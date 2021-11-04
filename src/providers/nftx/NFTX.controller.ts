@@ -1,11 +1,20 @@
-import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiHeader, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import { ethers } from 'ethers';
+import { Response } from 'express';
 import { BaseProvider, InjectEthersProvider } from 'nestjs-ethers';
 import { APIKeyAuthGuard } from 'src/auth/api-key.guard';
 import { CollectionService } from 'src/database/Collection.service';
 import { Collection } from 'src/database/entitites/Collection.entity';
+import { ERC721_BASIC_ABI } from './core/constants';
 
 @ApiTags('NFTX')
 @Controller()
@@ -29,19 +38,22 @@ export class NFTXController {
   @ApiHeader({
     name: 'X-API-KEY',
   })
+  @ApiResponse({ status: 409, description: 'Collection already exists.' })
   @ApiResponse({ type: Collection })
   public async createCollection(
     @Param('contractAddress') contractAddress: string,
+    @Res({ passthrough: true }) response: Response,
   ) {
-    const contractABIResponse = await fetch<EtherscanABIResponse>(
-      // TODO(@quantumlyy): Include API key
-      `https://api.etherscan.io/api?module=contract&action=getabi&address=${contractAddress}`,
-      FetchResultTypes.JSON,
-    );
+    const exists = await this.collectionService.exists({ contractAddress });
+    if (exists) {
+      return response //
+        .status(HttpStatus.CONFLICT)
+        .send();
+    }
 
     const contract = new ethers.Contract(
       contractAddress,
-      contractABIResponse.result,
+      ERC721_BASIC_ABI,
       this.ethersProvider,
     );
 
@@ -50,15 +62,9 @@ export class NFTXController {
       name: await contract.name(),
       symbol: await contract.symbol(),
       size: (await contract.totalSupply()).toNumber(),
-      abi: contractABIResponse.result,
+      abi: JSON.stringify(ERC721_BASIC_ABI),
     });
 
     return collection;
   }
-}
-
-interface EtherscanABIResponse {
-  status: string;
-  message: string;
-  result: string;
 }

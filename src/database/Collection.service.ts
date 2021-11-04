@@ -16,7 +16,15 @@ export class CollectionService {
     });
   }
 
-  public create(data: Prisma.CollectionCreateInput) {
+  public async exists(collectionCountInput: Prisma.CollectionWhereInput) {
+    const count = await this.prisma.collection.count({
+      where: collectionCountInput,
+    });
+
+    return count !== 0 ? true : false;
+  }
+
+  public async create(data: Prisma.CollectionCreateInput) {
     return this.prisma.collection.create({ data });
   }
 
